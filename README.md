@@ -1,2 +1,2 @@
 # openvz-installer
-this is a program to install openvz and to manage containers 
+This is a bash program to install openvz and to manage openvz containers 
