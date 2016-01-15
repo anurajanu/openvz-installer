@@ -11,7 +11,7 @@ echo -e "${RED}		[     Openvz Virtualization     ]${NC}"
 echo -e "${BLUE}		---------------------------------${NC}"
 echo -e " "
 PS3='Please Enter Your Choice:- '
-options=("Openvz installation" "Template Download" "Container creation" "Destroy Container" "Quit")
+options=("Openvz installation" "Template Download" "Container creation" "Destroy Container" "Restart Container"  "Stop Container"  "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -22,7 +22,7 @@ do
 			echo -e "${RED}No Internet Access${NC}"
 		exit
 	fi
-		echo -ne ""${GREEN}Enabling  Openvz Repo:${NC}
+		echo -ne ""${GREEN}Enabling  Openvz Repo:-${NC}
 	rm -rf /etc/yum.repos.d/openvz.repo &> /dev/null
  if	wget -P /etc/yum.repos.d/ http://ftp.openvz.org/openvz.repo  &> /dev/null ; then
 	rpm --import http://ftp.openvz.org/RPM-GPG-Key-OpenVZ &> /dev/null
@@ -32,7 +32,7 @@ do
 		echo -e "${RED}NO${NC}"
 	exit
 fi
-		echo -ne "${GREEN}Installing Necessary Packages:${NC}"
+		echo -ne "${GREEN}Installing Necessary Packages:-${NC}"
 	if	/usr/bin/yum  install vzkernel  vzctl vzquota ploop  -y &> /dev/null ; then
 		echo -e "${RED}YES${NC}"
 		echo -e "${BLUE}Reboot System To Choose Openvz Kernel${NC}"
@@ -61,11 +61,11 @@ fi
 "Container creation")
             echo -e "${GREEN}Container Creation${NC}"
 		NAME=`ls /vz/template/cache/ | cut -d"." -f1`
-		read -p "Enter Container Id:" ID
+		read -p "Enter Container Id:- " ID
 #		echo -e "${GREEN}Running container Hosts Are : ${HOST}${NC}"
-		read -p "Enter container Ip Address:" IP
-		read -p "Enter Container Host Name: " NAM
-		read -p "Enter Container Password:" PASS
+		read -p "Enter container Ip Address:- " IP
+		read -p "Enter Container Host Name:-  " NAM
+		read -p "Enter Container Password:- " PASS
 		echo -e "${GREEN}Creating Container${NC}"
 		/usr/sbin/vzctl create ${ID}  --layout simfs --ostemplate ${NAME} &> /dev/null
 		/usr/sbin/vzctl  set  ${ID}  --ipadd  ${IP}  --save    &>/dev/null
@@ -80,8 +80,9 @@ fi
 		echo -e "----------------------------------------------------------------------------------"
 		echo -e "${NC}"
 echo -e "Options........
-1) Openvz installation 3) Container creation   5) Quit
-2) Template Download   4) Destroy Container "
+1) Openvz installation	4) Destroy Container	7) Quit
+2) Template Download	5) Restart Container
+3) Container creation	6) Stop Container"
 
 ;;
 "Destroy Container")
@@ -96,9 +97,26 @@ clear
 vzlist -a
 echo "----------------------------------------------------------------------"
 echo -e "Options........
-1) Openvz installation 3) Container creation   5) Quit
-2) Template Download   4) Destroy Container "
+1) Openvz installation	4) Destroy Container	7) Quit
+2) Template Download	5) Restart Container
+3) Container creation	6) Stop Container
+"
 ;;
+
+"Restart Container")
+	clear
+	vzlist -a
+	read -p "Enter CTID To Restart:" CTID &> /dev/null
+	/usr/sbin/vzctl restart ${CTID}
+
+;;
+
+"Stop Container")
+	clear
+	vzlist -a
+	read -p "Enter CTID to Stop:" CTID1 &> /dev/null
+;;
+
         "Quit")
 	clear
             break
