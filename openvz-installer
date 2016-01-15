@@ -123,8 +123,10 @@ echo -e "Options........
             ;;
         *) echo -e "${RED}*********Invalid option**********${NC}
 ${BLUE}Valid Options are.......${NC}
-1) Openvz installation 3) Container creation   5) Quit
-2) Template Download   4) Destroy Container ";;
+1) Openvz installation	4) Destroy Container	7) Quit
+2) Template Download	5) Restart Container
+3) Container creation	6) Stop Container
+";;
     esac
 done
 
